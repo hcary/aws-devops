@@ -1,0 +1,34 @@
+#!/bin/bash
+# 
+# This file is part of the aws-devops distribution (https://github.com/hcary/aws-devops).
+# Copyright (c) 2019 Harvey Cary.
+# 
+# This program is free software: you can redistribute it and/or modify  
+# it under the terms of the GNU General Public License as published by  
+# the Free Software Foundation, version 3.
+#
+# This program is distributed in the hope that it will be useful, but 
+# WITHOUT ANY WARRANTY; without even the implied warranty of 
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License 
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+
+MYUSER=$USER
+MYUID=`id -u $USER`
+DEST=/home/$MYUSER
+
+docker run \
+    --name $USER.$$ \
+    --hostname "aws" \
+    -e "MYUSER=$MYUSER" \
+    -e "MYUID=$MYUID" \
+    -it \
+    --rm \
+    --mount type=bind,src="$(echo $HOME)",dst=/home/"$(echo $USER)" \
+    ${COMPANY}/aws \
+    /bin/bash
+
+#docker run --name $USER.$$ -e "MYUSER=$MYUSER" -e "MYUID=$MYUID" -t -i --rm --mount 'type=bind,src=/Users/hcary,dst=/home/hcary' rc3labs/youtube-dl /bin/bash

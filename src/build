@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# 
+# This file is part of the aws-devops distribution (https://github.com/hcary/aws-devops).
+# Copyright (c) 2019 Harvey Cary.
+# 
+# This program is free software: you can redistribute it and/or modify  
+# it under the terms of the GNU General Public License as published by  
+# the Free Software Foundation, version 3.
+#
+# This program is distributed in the hope that it will be useful, but 
+# WITHOUT ANY WARRANTY; without even the implied warranty of 
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License 
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+
+build_num=`cat build_num.txt`
+newnum=`expr $build_num + 1`
+echo $newnum >  build_num.txt
+
+build_dt=`date '+%Y-%m-%d'`
+serial=`date '+%Y%m%d%H%M%S'`
+
+export build_num=$newnum
+
+docker build -t ${COMPANY}/aws . \
+    --label "build=${build_num}" \
+    --label "build_date"="${build_dt}" \
+    --label "version=1.0" \
+    --label "maintainer"="${EMAIL}" \
+    --label "author"="Harvey Cary" \
+    --label "company"="${COMPANY}" \
+    --label "serial"="${serial}"
+ 
